@@ -12,6 +12,7 @@ import {
 import { loyaltyDiscounts, loyaltyPoints } from "./customers/loyaltyPoints";
 import { totalsByCustomer } from "./customers/totalsByCustomers";
 import { discount, weekendBonus } from "./promotions/discount";
+import { allTaxables, taxes } from "./taxes/taxes";
 
 export function main(): string {
   const base = __dirname;
@@ -63,27 +64,9 @@ export function main(): string {
 
     // Vérifier si tous les produits sont taxables
     let allTaxable = true;
-    for (const item of totalsByCustomer[cid].items) {
-      const prod = products[item.product_id];
-      if (prod && prod.taxable === false) {
-        allTaxable = false;
-        break;
-      }
-    }
+    allTaxable = allTaxables(allTaxable, cid);
 
-    if (allTaxable) {
-      tax = Math.round(taxable * TAX * 100) / 100; // Arrondi à 2 décimales
-    } else {
-      // Calcul taxe par ligne (plus complexe)
-      for (const item of totalsByCustomer[cid].items) {
-        const prod = products[item.product_id];
-        if (prod && prod.taxable !== false) {
-          const itemTotal = item.qty * (prod.price || item.unit_price);
-          tax += itemTotal * TAX;
-        }
-      }
-      tax = Math.round(tax * 100) / 100;
-    }
+    tax = taxes(allTaxable, taxable, tax, cid);
 
     // Frais de port complexes (duplication #3)
     let ship = 0.0;
