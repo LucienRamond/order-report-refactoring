@@ -11,6 +11,7 @@ import {
 } from "./utils/globals";
 import { loyaltyPoints } from "./customers/loyaltyPoints";
 import { totalsByCustomer } from "./customers/totalsByCustomers";
+import { discount, weekendBonus } from "./promotions/discount";
 
 export function main(): string {
   const base = __dirname;
@@ -34,29 +35,10 @@ export function main(): string {
     const zone = cust.shipping_zone || "ZONE1";
     const currency = cust.currency || "EUR";
 
-    const sub = totalsByCustomer[cid].subtotal;
+    const sub: number = totalsByCustomer[cid].subtotal;
 
-    // Remise par paliers (duplication #1 + magic numbers)
-    let disc = 0.0;
-    if (sub > 50) {
-      disc = sub * 0.05;
-    }
-    if (sub > 100) {
-      disc = sub * 0.1; // écrase la précédente (bug intentionnel)
-    }
-    if (sub > 500) {
-      disc = sub * 0.15;
-    }
-    if (sub > 1000 && level === "PREMIUM") {
-      disc = sub * 0.2;
-    }
-
-    // Bonus weekend (règle cachée basée sur la date)
-    const firstOrderDate = totalsByCustomer[cid].items[0]?.date || "";
-    const dayOfWeek = firstOrderDate ? new Date(firstOrderDate).getDay() : 0;
-    if (dayOfWeek === 0 || dayOfWeek === 6) {
-      disc = disc * 1.05; // 5% de bonus sur la remise
-    }
+    let disc = discount(sub, level);
+    disc = weekendBonus(totalsByCustomer, cid);
 
     // Calcul remise fidélité (duplication #2)
     let loyaltyDiscount = 0.0;
