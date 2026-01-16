@@ -1,6 +1,6 @@
-import { orders as f_orders } from "../orders/orders";
-import { products as f_products } from "../products/products";
-import { promotions as f_promotions } from "../promotions/promotions";
+import { orders as f_orders } from "../parse/orders";
+import { products as f_products } from "../parse/products";
+import { promotions as f_promotions } from "../parse/promotions";
 
 // Groupement par client (logique métier mélangée avec aggregation)
 export const totalsByCustomer: Record<string, any> = {};

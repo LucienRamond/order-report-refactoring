@@ -26,13 +26,3 @@ export function weekendBonus(totalsByCustomer: any, cid: any) {
   }
   return disc;
 }
-
-// // Plafond de remise global (règle cachée)
-// let totalDiscount = disc + loyaltyDiscount;
-// if (totalDiscount > MAX_DISCOUNT) {
-//   totalDiscount = MAX_DISCOUNT;
-//   // On ajuste proportionnellement (logique complexe)
-//   const ratio = MAX_DISCOUNT / (disc + loyaltyDiscount);
-//   disc = disc * ratio;
-//   loyaltyDiscount = loyaltyDiscount * ratio;
-// }

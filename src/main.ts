@@ -1,8 +1,8 @@
 import * as fs from "fs";
 import * as path from "path";
-import { customers as f_customers } from "./customers/customer";
-import { products as f_products } from "./products/products";
-import { shipping_zones } from "./shipping_zones/shipping_zones";
+import { customers as f_customers } from "./parse/customer";
+import { products as f_products } from "./parse/products";
+import { shipping_zones } from "./parse/shipping_zones";
 import {
   TAX,
   SHIPPING_LIMIT,
@@ -40,9 +40,10 @@ export function main(): string {
     let disc = discount(sub, level);
     disc = weekendBonus(totalsByCustomer, cid);
 
-    // Calcul remise fidélité (duplication #2)
     let loyaltyDiscount = 0.0;
+
     const pts = loyaltyPoints[cid] || 0;
+
     if (pts > 100) {
       loyaltyDiscount = Math.min(pts * 0.1, 50.0);
     }

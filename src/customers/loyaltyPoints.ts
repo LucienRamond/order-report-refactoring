@@ -1,5 +1,5 @@
 import { LOYALTY_RATIO, MAX_DISCOUNT } from "../utils/globals";
-import { orders as f_orders } from "../orders/orders";
+import { orders as f_orders } from "../parse/orders";
 
 // Calcul des points de fidélité
 export const loyaltyPoints: Record<string, number> = {};
