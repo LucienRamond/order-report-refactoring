@@ -1,4 +1,5 @@
 import { totalsByCustomer } from "../customers/totalsByCustomers";
+import { MAX_DISCOUNT } from "../utils/globals";
 
 let disc = 0.0;
 

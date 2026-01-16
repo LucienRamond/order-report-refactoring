@@ -9,7 +9,7 @@ import {
   HANDLING_FEE,
   MAX_DISCOUNT,
 } from "./utils/globals";
-import { loyaltyPoints } from "./customers/loyaltyPoints";
+import { loyaltyDiscounts, loyaltyPoints } from "./customers/loyaltyPoints";
 import { totalsByCustomer } from "./customers/totalsByCustomers";
 import { discount, weekendBonus } from "./promotions/discount";
 
@@ -38,18 +38,14 @@ export function main(): string {
     const sub: number = totalsByCustomer[cid].subtotal;
 
     let disc = discount(sub, level);
+
     disc = weekendBonus(totalsByCustomer, cid);
 
     let loyaltyDiscount = 0.0;
 
     const pts = loyaltyPoints[cid] || 0;
 
-    if (pts > 100) {
-      loyaltyDiscount = Math.min(pts * 0.1, 50.0);
-    }
-    if (pts > 500) {
-      loyaltyDiscount = Math.min(pts * 0.15, 100.0);
-    }
+    loyaltyDiscount = loyaltyDiscounts(pts, loyaltyDiscount);
 
     // Plafond de remise global (règle cachée)
     let totalDiscount = disc + loyaltyDiscount;
